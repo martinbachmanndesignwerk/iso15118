@@ -52,7 +52,7 @@ from iso15118.shared.messages.enums import (
     IsolationLevel,
     PriceAlgorithm,
     Protocol,
-    UnitSymbol,
+    UnitSymbol, CpState,
 )
 from iso15118.shared.messages.iso15118_2.datatypes import (
     ACEVSEChargeParameter,
@@ -128,6 +128,7 @@ class EVDataContext:
     ac_current: Optional[dict] = None  # {"l1": 10, "l2": 10, "l3": 10}
     ac_voltage: Optional[dict] = None  # {"l1": 230, "l2": 230, "l3": 230}
     soc: Optional[int] = None  # 0-100
+    cp_state: Optional[CpState] = None
 
 
 class V20ServiceParamMapping(BaseModel):
@@ -516,6 +517,10 @@ class SimEVSEController(EVSEControllerInterface):
         pass
 
     async def stop_charger(self) -> None:
+        pass
+
+    async def set_cp_state(self, cp_state: CpState) -> None:
+        """Overrides EVSEControllerInterface.set_cp_state()."""
         pass
 
     async def service_renegotiation_supported(self) -> bool:
