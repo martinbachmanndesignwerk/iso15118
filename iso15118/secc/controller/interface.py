@@ -2,7 +2,7 @@
 This module contains the abstract class for an SECC to retrieve data from the EVSE
 (Electric Vehicle Supply Equipment).
 """
-
+import asyncio
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Optional
@@ -68,7 +68,6 @@ class EVDataContext:
     ac_current: Optional[dict] = None  # {"l1": 10, "l2": 10, "l3": 10}
     ac_voltage: Optional[dict] = None  # {"l1": 230, "l2": 230, "l3": 230}
     soc: Optional[int] = None  # 0-100
-    cp_state: Optional[CpState] = None
 
 @dataclass
 class EVChargeParamsLimits:
@@ -306,20 +305,15 @@ class EVSEControllerInterface(ABC):
         """
         raise NotImplementedError
 
-    async def set_cp_state(self, cp_state: CpState) -> None:
+    @abstractmethod
+    async def get_cp_state(self) -> CpState:
         """
-        Sets the CpState
-
-        Args:
-            A CpState instance, which contains the PWM states
+        Returns current cp state
 
         Relevant for:
         - IEC 61851-1
         """
-        self.ev_data_context.cp_state = cp_state
-
-    async def get_cp_state(self) -> CpState:
-        return self.ev_data_context.cp_state
+        raise NotImplementedError
 
     @abstractmethod
     async def service_renegotiation_supported(self) -> bool:

@@ -2,6 +2,7 @@
 This module contains the code to retrieve (hardware-related) data from the EVSE
 (Electric Vehicle Supply Equipment).
 """
+import asyncio
 import logging
 import math
 import time
@@ -128,7 +129,6 @@ class EVDataContext:
     ac_current: Optional[dict] = None  # {"l1": 10, "l2": 10, "l3": 10}
     ac_voltage: Optional[dict] = None  # {"l1": 230, "l2": 230, "l3": 230}
     soc: Optional[int] = None  # 0-100
-    cp_state: Optional[CpState] = None
 
 
 class V20ServiceParamMapping(BaseModel):
@@ -197,7 +197,7 @@ class SimEVSEController(EVSEControllerInterface):
         return "UK123E1234"
 
     async def get_supported_energy_transfer_modes(
-        self, protocol: Protocol
+            self, protocol: Protocol
     ) -> List[EnergyTransferModeEnum]:
         """Overrides EVSEControllerInterface.get_supported_energy_transfer_modes()."""
         if protocol == Protocol.DIN_SPEC_70121:
@@ -216,9 +216,9 @@ class SimEVSEController(EVSEControllerInterface):
         return [dc_extended, ac_three_phase]
 
     async def get_scheduled_se_params(
-        self,
-        selected_energy_service: SelectedEnergyService,
-        schedule_exchange_req: ScheduleExchangeReq,
+            self,
+            selected_energy_service: SelectedEnergyService,
+            schedule_exchange_req: ScheduleExchangeReq,
     ) -> Optional[ScheduledScheduleExchangeResParams]:
         """Overrides EVSEControllerInterface.get_scheduled_se_params()."""
         charging_power_schedule_entry = PowerScheduleEntry(
@@ -338,7 +338,7 @@ class SimEVSEController(EVSEControllerInterface):
         return scheduled_params
 
     async def get_service_parameter_list(
-        self, service_id: int
+            self, service_id: int
     ) -> Optional[ServiceParameterList]:
         """Overrides EVSEControllerInterface.get_service_parameter_list()."""
         if service_id in self.v20_service_id_parameter_mapping.keys():
@@ -352,9 +352,9 @@ class SimEVSEController(EVSEControllerInterface):
         return service_parameter_list
 
     async def get_dynamic_se_params(
-        self,
-        selected_energy_service: SelectedEnergyService,
-        schedule_exchange_req: ScheduleExchangeReq,
+            self,
+            selected_energy_service: SelectedEnergyService,
+            schedule_exchange_req: ScheduleExchangeReq,
     ) -> Optional[DynamicScheduleExchangeResParams]:
         """Overrides EVSEControllerInterface.get_dynamic_se_params()."""
         price_level_schedule_entry = PriceLevelScheduleEntry(
@@ -401,7 +401,7 @@ class SimEVSEController(EVSEControllerInterface):
         return AuthorizationStatus.ACCEPTED
 
     async def get_sa_schedule_list_dinspec(
-        self, max_schedule_entries: Optional[int], departure_time: int = 0
+            self, max_schedule_entries: Optional[int], departure_time: int = 0
     ) -> Optional[List[SAScheduleTupleEntryDINSPEC]]:
         """Overrides EVSEControllerInterface.get_sa_schedule_list_dinspec()."""
         sa_schedule_list: List[SAScheduleTupleEntryDINSPEC] = []
@@ -422,10 +422,10 @@ class SimEVSEController(EVSEControllerInterface):
         return sa_schedule_list
 
     async def get_sa_schedule_list(
-        self,
-        ev_charge_params_limits: EVChargeParamsLimits,
-        max_schedule_entries: Optional[int],
-        departure_time: int = 0,
+            self,
+            ev_charge_params_limits: EVChargeParamsLimits,
+            max_schedule_entries: Optional[int],
+            departure_time: int = 0,
     ) -> Optional[List[SAScheduleTuple]]:
         """Overrides EVSEControllerInterface.get_sa_schedule_list()."""
         sa_schedule_list: List[SAScheduleTuple] = []
@@ -519,9 +519,9 @@ class SimEVSEController(EVSEControllerInterface):
     async def stop_charger(self) -> None:
         pass
 
-    async def set_cp_state(self, cp_state: CpState) -> None:
+    async def get_cp_state(self) -> CpState:
         """Overrides EVSEControllerInterface.set_cp_state()."""
-        pass
+        return CpState.C2
 
     async def service_renegotiation_supported(self) -> bool:
         """Overrides EVSEControllerInterface.service_renegotiation_supported()."""
@@ -591,7 +591,7 @@ class SimEVSEController(EVSEControllerInterface):
         )
 
     async def get_ac_bpt_charge_params_v20(
-        self,
+            self,
     ) -> BPTACChargeParameterDiscoveryResParams:
         """Overrides EVSEControllerInterface.get_ac_bpt_charge_params_v20()."""
         ac_charge_params_v20 = (await self.get_ac_charge_params_v20()).dict()
@@ -606,7 +606,7 @@ class SimEVSEController(EVSEControllerInterface):
         )
 
     async def get_scheduled_ac_charge_loop_params(
-        self,
+            self,
     ) -> ScheduledACChargeLoopResParams:
         """Overrides EVControllerInterface.get_scheduled_ac_charge_loop_params()."""
         return ScheduledACChargeLoopResParams(
@@ -617,7 +617,7 @@ class SimEVSEController(EVSEControllerInterface):
         )
 
     async def get_bpt_scheduled_ac_charge_loop_params(
-        self,
+            self,
     ) -> BPTScheduledACChargeLoopResParams:
         """Overrides EVControllerInterface.get_bpt_scheduled_ac_charge_loop_params()."""
         return BPTScheduledACChargeLoopResParams(
@@ -637,7 +637,7 @@ class SimEVSEController(EVSEControllerInterface):
         )
 
     async def get_bpt_dynamic_ac_charge_loop_params(
-        self,
+            self,
     ) -> BPTDynamicACChargeLoopResParams:
         """Overrides EVControllerInterface.get_bpt_dynamic_ac_charge_loop_params()."""
         return BPTDynamicACChargeLoopResParams(
@@ -701,12 +701,12 @@ class SimEVSEController(EVSEControllerInterface):
         pass
 
     async def set_precharge(
-        self, voltage: PVEVTargetVoltage, current: PVEVTargetCurrent
+            self, voltage: PVEVTargetVoltage, current: PVEVTargetCurrent
     ):
         pass
 
     async def send_charging_command(
-        self, voltage: PVEVTargetVoltage, current: PVEVTargetCurrent
+            self, voltage: PVEVTargetVoltage, current: PVEVTargetCurrent
     ):
         pass
 
@@ -741,7 +741,7 @@ class SimEVSEController(EVSEControllerInterface):
         )
 
     async def get_dc_bpt_charge_params_v20(
-        self,
+            self,
     ) -> BPTDCChargeParameterDiscoveryResParams:
         """Overrides EVSEControllerInterface.get_dc_bpt_charge_params_v20()."""
         return BPTDCChargeParameterDiscoveryResParams(
