@@ -5,19 +5,19 @@ from typing import List, Union
 logger = logging.getLogger(__name__)
 
 # For XSD type xs:unsignedLong with value range [0..18446744073709551615]
-UINT_64_MAX = 2 ** 64 - 1
+UINT_64_MAX = 2**64 - 1
 # For XSD type xs:unsignedInt with value range [0..4294967296]
-UINT_32_MAX = 2 ** 32 - 1
+UINT_32_MAX = 2**32 - 1
 # For XSD type xs:unsignedShort with value range [0..65535]
-UINT_16_MAX = 2 ** 16 - 1
+UINT_16_MAX = 2**16 - 1
 # For XSD type xs:unsignedByte with value range [0..255]
-UINT_8_MAX = 2 ** 8 - 1
+UINT_8_MAX = 2**8 - 1
 # For XSD type xs:short with value range [-32768..32767]
-INT_16_MAX = 2 ** 15 - 1
-INT_16_MIN = -(2 ** 15)
+INT_16_MAX = 2**15 - 1
+INT_16_MIN = -(2**15)
 # For XSD type xs:byte with value range [-128..127]
-INT_8_MAX = 2 ** 7 - 1
-INT_8_MIN = -(2 ** 7)
+INT_8_MAX = 2**7 - 1
+INT_8_MIN = -(2**7)
 
 
 class AuthEnum(str, Enum):
@@ -256,9 +256,9 @@ class Protocol(Enum):
     ISO_15118_20_ACDP = (Namespace.ISO_V20_ACDP, ISOV20PayloadTypes)
 
     def __init__(
-            self,
-            namespace: Namespace,
-            payload_types: Union[DINPayloadTypes, ISOV2PayloadTypes, ISOV20PayloadTypes],
+        self,
+        namespace: Namespace,
+        payload_types: Union[DINPayloadTypes, ISOV2PayloadTypes, ISOV20PayloadTypes],
     ):
         """
         The value of each enum member is a tuple, where the first tuple entry

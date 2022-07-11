@@ -28,8 +28,9 @@ from iso15118.shared.messages.din_spec.datatypes import (
 from iso15118.shared.messages.enums import (
     AuthorizationStatus,
     Contactor,
+    CpState,
     EnergyTransferModeEnum,
-    Protocol, CpState,
+    Protocol,
 )
 from iso15118.shared.messages.iso15118_2.datatypes import (
     ACEVSEChargeParameter,
@@ -103,7 +104,7 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_supported_energy_transfer_modes(
-            self, protocol: Protocol
+        self, protocol: Protocol
     ) -> List[EnergyTransferModeEnum]:
         """
         The available energy transfer modes, which depends on the socket the EV is
@@ -116,9 +117,9 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_scheduled_se_params(
-            self,
-            selected_energy_service: SelectedEnergyService,
-            schedule_exchange_req: ScheduleExchangeReq,
+        self,
+        selected_energy_service: SelectedEnergyService,
+        schedule_exchange_req: ScheduleExchangeReq,
     ) -> Optional[ScheduledScheduleExchangeResParams]:
         """
         Gets the parameters for a ScheduleExchangeResponse, which correspond to the
@@ -143,9 +144,9 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_dynamic_se_params(
-            self,
-            selected_energy_service: SelectedEnergyService,
-            schedule_exchange_req: ScheduleExchangeReq,
+        self,
+        selected_energy_service: SelectedEnergyService,
+        schedule_exchange_req: ScheduleExchangeReq,
     ) -> Optional[DynamicScheduleExchangeResParams]:
         """
         Gets the parameters for a ScheduleExchangeResponse, which correspond to the
@@ -195,10 +196,10 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_sa_schedule_list(
-            self,
-            ev_charge_params_limits: EVChargeParamsLimits,
-            max_schedule_entries: Optional[int],
-            departure_time: int = 0,
+        self,
+        ev_charge_params_limits: EVChargeParamsLimits,
+        max_schedule_entries: Optional[int],
+        departure_time: int = 0,
     ) -> Optional[List[SAScheduleTuple]]:
         """
         Requests the charging schedule from a secondary actor (SA) like a
@@ -229,7 +230,7 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_sa_schedule_list_dinspec(
-            self, max_schedule_entries: Optional[int], departure_time: int = 0
+        self, max_schedule_entries: Optional[int], departure_time: int = 0
     ) -> Optional[List[SAScheduleTupleEntryDINSPEC]]:
         """
         Requests the charging schedule from a secondary actor (SA) like a
@@ -327,7 +328,7 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_service_parameter_list(
-            self, service_id: int
+        self, service_id: int
     ) -> Optional[ServiceParameterList]:
         """
         Provides a list of parameters for a specific service ID for which the EVCC
@@ -426,7 +427,7 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_ac_bpt_charge_params_v20(
-            self,
+        self,
     ) -> BPTACChargeParameterDiscoveryResParams:
         """
         Gets the charge parameters needed for a ChargeParameterDiscoveryRes for
@@ -439,7 +440,7 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_scheduled_ac_charge_loop_params(
-            self,
+        self,
     ) -> ScheduledACChargeLoopResParams:
         """
         Gets the parameters for the ACChargeLoopRes in the Scheduled control mode
@@ -451,7 +452,7 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_bpt_scheduled_ac_charge_loop_params(
-            self,
+        self,
     ) -> BPTScheduledACChargeLoopResParams:
         """
         Gets the parameters for the ACChargeLoopRes in the Scheduled control mode for
@@ -474,7 +475,7 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_bpt_dynamic_ac_charge_loop_params(
-            self,
+        self,
     ) -> BPTDynamicACChargeLoopResParams:
         """
         Gets the parameters for the ACChargeLoopRes in the Dynamic control mode for
@@ -531,7 +532,7 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def set_precharge(
-            self, voltage: PVEVTargetVoltage, current: PVEVTargetCurrent
+        self, voltage: PVEVTargetVoltage, current: PVEVTargetCurrent
     ):
         """
         Sets the precharge information coming from the EV.
@@ -558,7 +559,7 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def send_charging_command(
-            self, voltage: PVEVTargetVoltage, current: PVEVTargetCurrent
+        self, voltage: PVEVTargetVoltage, current: PVEVTargetCurrent
     ):
         """
         This method is called in the state CurrentDemand. The values target current
@@ -641,7 +642,7 @@ class EVSEControllerInterface(ABC):
 
     @abstractmethod
     async def get_dc_bpt_charge_params_v20(
-            self,
+        self,
     ) -> BPTDCChargeParameterDiscoveryResParams:
         """
         Gets the charge parameters needed for a ChargeParameterDiscoveryRes for

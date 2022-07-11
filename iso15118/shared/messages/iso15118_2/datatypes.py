@@ -465,6 +465,7 @@ class ResponseCode(str, Enum):
     FAILED_CERTIFICATE_REVOKED = "FAILED_CertificateRevoked"
     FAILED_STATE_ERROR = "FAILED_StateError"
 
+
 class ServiceList(BaseModel):
     """See section 9.5.2.13 in DIN SPEC 70121"""
 
