@@ -435,3 +435,4 @@ class CpState(str, Enum):
     D2 = "D2"
     E = "E"
     F = "F"
+    UNKNOWN = "UNKNOWN"

@@ -2,7 +2,6 @@
 This module contains the code to retrieve (hardware-related) data from the EVSE
 (Electric Vehicle Supply Equipment).
 """
-import asyncio
 import logging
 import math
 import time

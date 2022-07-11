@@ -2,7 +2,6 @@
 This module contains the abstract class for an SECC to retrieve data from the EVSE
 (Electric Vehicle Supply Equipment).
 """
-import asyncio
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List, Optional
