@@ -1287,7 +1287,8 @@ class PowerDelivery(StateSECC):
             cp_state = await self.comm_session.evse_controller.get_cp_state()
             if cp_state not in [CpState.C2, CpState.D2]:
                 logger.info(
-                    f"Cp state is not C2 or D2, state is {cp_state} .waiting for C2 or D2"
+                    f"Cp state is not C2 or D2, state is {cp_state} ."
+                    f"waiting for C2 or D2"
                 )
                 # wait for state C or D 250ms
                 await asyncio.sleep(0.25)
