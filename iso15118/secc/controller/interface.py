@@ -69,6 +69,7 @@ class EVDataContext:
     ac_voltage: Optional[dict] = None  # {"l1": 230, "l2": 230, "l3": 230}
     soc: Optional[int] = None  # 0-100
 
+
 @dataclass
 class EVChargeParamsLimits:
     ev_max_voltage: Optional[PVEVMaxVoltageLimit] = None
