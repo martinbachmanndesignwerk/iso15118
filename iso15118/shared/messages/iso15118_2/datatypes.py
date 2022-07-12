@@ -463,7 +463,6 @@ class ResponseCode(str, Enum):
         "FAILED_CertificateNotAllowedAtThisEVSE"
     )
     FAILED_CERTIFICATE_REVOKED = "FAILED_CertificateRevoked"
-    FAILED_STATE_ERROR = "FAILED_StateError"
 
 
 class ServiceList(BaseModel):
