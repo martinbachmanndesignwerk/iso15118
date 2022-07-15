@@ -125,9 +125,9 @@ def get_ssl_context(server_side: bool) -> Optional[SSLContext]:
     if server_side:
         try:
             ssl_context.load_cert_chain(
-                certfile=CertPath.CPO_CERT_CHAIN_PEM
-                keyfile=KeyPath.SECC_LEAF_PEM
-                password=load_priv_key_pass()
+                certfile=CertPath.CPO_CERT_CHAIN_PEM,
+                keyfile=KeyPath.SECC_LEAF_PEM,
+                password=load_priv_key_pass(),
             )
         except SSLError:
             logger.exception(
@@ -1140,7 +1140,7 @@ def derive_certificate_hash_data(certificate: bytes) -> Dict[str, str]:
         format=PublicFormat.UncompressedPoint,
     )
     # TODO: maybe rfc4514_string?
-    distinguished_name = str(der_certificate.issuer)
+    distinguished_name = der_certificate.issuer.rfc4514_string()
     serial_number = der_certificate.serial_number
 
     # Convert to the naming used in OCPP.

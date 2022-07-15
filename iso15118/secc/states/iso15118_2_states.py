@@ -6,7 +6,7 @@ SessionStopReq.
 
 import logging
 import time
-from typing import List, Optional, Type, Union
+from typing import Dict, List, Optional, Type, Union
 
 from iso15118.secc.comm_session_handler import SECCCommunicationSession
 from iso15118.secc.controller.interface import EVChargeParamsLimits
@@ -771,9 +771,10 @@ class PaymentDetails(StateSECC):
         certificate_chain: Optional[CertificateChain],
     ) -> Optional[List[Dict[str, str]]]:
         """Return a list of hash data for a contract certificate chain."""
+        all_certificates = [certificate_chain.certificate] + certificate_chain.sub_certificates.certificates
         return [
             derive_certificate_hash_data(certificate)
-            for certificate in certificate_chain.sub_certificates.certificates
+            for certificate in all_certificates
         ]
 
     async def process_message(
@@ -962,7 +963,7 @@ class Authorization(StateSECC):
             id_token=self.comm_session.emaid,
             id_token_type=self.comm_session.selected_auth_option,
         )
-        if authorization_result == (AuthorizationStatus.ACCEPTED):
+        if authorization_result == AuthorizationStatus.ACCEPTED:
             auth_status = EVSEProcessing.FINISHED
             next_state = ChargeParameterDiscovery
 
